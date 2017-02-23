@@ -712,15 +712,14 @@ function addHiddenValue() {
 }
 
 function getPolicies() {
-    // var transport = new Thrift.Transport(pmp_server_url);
-    // var protocol = new Thrift.Protocol(transport);
-    // var client = new TAny2PmpClient(protocol);
-    // var msg = JSON.stringify(client.listPoliciesPmp());
-    // msg = JSON.parse(msg);
-    // msg.forEach(function(element) {
-    policies.push("hi");
-    policies.push("hey");
-    // });
+    var transport = new Thrift.Transport(pmp_server_url);
+    var protocol = new Thrift.Protocol(transport);
+    var client = new TAny2PmpClient(protocol);
+    var msg = JSON.stringify(client.listPoliciesPmp());
+    msg = JSON.parse(msg);
+    msg.forEach(function(element) {
+        policies.push(element);
+    });
 }
 window.onload = function() {
     getPolicies()
