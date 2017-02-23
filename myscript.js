@@ -1,10 +1,11 @@
 var uc = {
     version: "1.0"
 }
-var pmp_server_url="http://localhost:21010/pmp";
+var pmp_server_url = "http://localhost:21010/pmp";
 // var icon_uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/klEQVQ4jZWRy2sTURTGvzuTTCczTWYmiU46oT5TJD4Kpl2UdmGLUStFQbsR3bgriNK/QFEQN27ciaWKCAWhqNQQrBSh4qNSEQSpuzYtlbaESBrSRJPeO9dNAiWdYHrgwuE73/2dc+4FHKK/xzqUGI8/nps9/2bqRXxs8Kx13MnnGF2xQHT+52C6kLnEvk6fWcsvX6Dz3/rzvZ3G0YYAz5+eeGJvXOb3b8fuApBuDkev0ZVz9vjDjpGGANPJUzPZxYs2gMMVSUt96itPjHZ8dPILtUIuW1r1SBxdRwwDADQNAU0lYqm4+ashwMTrpTHOKK4P7b8BgNwaaruqejiZnFp9+b/pTQB+AMqr0c632R9xemUgdGfpfXc++ejYFwC+St3ceolUk5lEXzJsuU9m0n+KufVSsTvmCzNK4YKND59/r3lVIvmbibqQKrw7PbwwsG0FSbSJV4Y7qIteKyjqqcX8X49oI5Uq5BQZblmwJTAmbJYZd5y/NQgLQARAK4CmZ/ciI3yuhycetCUBNFXO7toVXNVkOYOVrQVdFfaBUqgyDgIoA+AA0rWNt/1C9W1UGQfAGHSFhAEodXx1Ac2GIrSAUoR0QQUQ2inAbPETDxiDaRDSHsDeHQHaTezZpQkElELgDL0xX7QewOUkRiyZzn7fmLSpDTAG7mLr9QD/ANHUpo+Ln4lLAAAAAElFTkSuQmCC";
 //utils
 var policies = [];
+var selected_policies = "";
 var Utils = uc.Utils = {
     isArray: function(obj) {
         return Object.prototype.toString.call(obj) === '[object Array]';
@@ -581,9 +582,7 @@ function addStyleString(str) {
 }
 BUTTON_WIDTH = 16, //pixels
     BUTTON_HEIGHT = 16, //pixels
-
-current_policy = 0;
-
+    current_policy = 0;
 // inject_circle()
 //add focus lister to everyinput field
 function addInputListeners() {
@@ -603,8 +602,9 @@ function hideButton(ele) {
     ele.style["backgroundPosition"] = ele.ucButtonX + "px 0px"
     // ele.addEventListener("mousedown", buildMenu(ele));
 }
+
 function showButton(ele) {
-  // alert("show butt")
+    // alert("show butt")
     ele.style["backgroundRepeat"] = "no-repeat"
     ele.style["backgroundImage"] = "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/klEQVQ4jZWRy2sTURTGvzuTTCczTWYmiU46oT5TJD4Kpl2UdmGLUStFQbsR3bgriNK/QFEQN27ciaWKCAWhqNQQrBSh4qNSEQSpuzYtlbaESBrSRJPeO9dNAiWdYHrgwuE73/2dc+4FHKK/xzqUGI8/nps9/2bqRXxs8Kx13MnnGF2xQHT+52C6kLnEvk6fWcsvX6Dz3/rzvZ3G0YYAz5+eeGJvXOb3b8fuApBuDkev0ZVz9vjDjpGGANPJUzPZxYs2gMMVSUt96itPjHZ8dPILtUIuW1r1SBxdRwwDADQNAU0lYqm4+ashwMTrpTHOKK4P7b8BgNwaaruqejiZnFp9+b/pTQB+AMqr0c632R9xemUgdGfpfXc++ejYFwC+St3ceolUk5lEXzJsuU9m0n+KufVSsTvmCzNK4YKND59/r3lVIvmbibqQKrw7PbwwsG0FSbSJV4Y7qIteKyjqqcX8X49oI5Uq5BQZblmwJTAmbJYZd5y/NQgLQARAK4CmZ/ciI3yuhycetCUBNFXO7toVXNVkOYOVrQVdFfaBUqgyDgIoA+AA0rWNt/1C9W1UGQfAGHSFhAEodXx1Ac2GIrSAUoR0QQUQ2inAbPETDxiDaRDSHsDeHQHaTezZpQkElELgDL0xX7QewOUkRiyZzn7fmLSpDTAG7mLr9QD/ANHUpo+Ln4lLAAAAAElFTkSuQmCC)"
     ele.ucButtonX = (ele.clientWidth - BUTTON_WIDTH);
@@ -695,19 +695,36 @@ function setFieldValue(field, value) {
     field.setAttribute("concon", "sssc_policy_" + value + "_" + field.name);
     field.style["border"] = "2px solid green"
     field.innerHTML = value;
+    //add to array
+    //first_name!&!policy1##last_name!&!policy2##age!&!policy3#
+    selected_policies += field.name + "!&!" + value + "##";
+    var uc_hidden = document.getElementById("uc_protected_fields");
+    uc_hidden.value = selected_policies
+}
+
+function addHiddenValue() {
+    forms = document.getElementsByTagName('form');
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "uc_protected_fields";
+    input.id = "uc_protected_fields";
+    forms[0].appendChild(input)
 }
 
 function getPolicies() {
-    var transport = new Thrift.Transport(pmp_server_url);
-    var protocol = new Thrift.Protocol(transport);
-    var client = new TAny2PmpClient(protocol);
-    var msg = JSON.stringify(client.listPoliciesPmp());
-    msg = JSON.parse(msg);
-    msg.forEach(function(element) {
-        policies.push(element);
-    });
+    // var transport = new Thrift.Transport(pmp_server_url);
+    // var protocol = new Thrift.Protocol(transport);
+    // var client = new TAny2PmpClient(protocol);
+    // var msg = JSON.stringify(client.listPoliciesPmp());
+    // msg = JSON.parse(msg);
+    // msg.forEach(function(element) {
+    policies.push("hi");
+    policies.push("hey");
+    // });
 }
 window.onload = function() {
     getPolicies()
     addInputListeners();
+    //append hiddenvalue to form
+    addHiddenValue();
 }
