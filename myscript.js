@@ -2,7 +2,6 @@ var uc = {
     version: "1.0"
 }
 var pmp_server_url = "http://localhost:21010/pmp";
-// var icon_uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/klEQVQ4jZWRy2sTURTGvzuTTCczTWYmiU46oT5TJD4Kpl2UdmGLUStFQbsR3bgriNK/QFEQN27ciaWKCAWhqNQQrBSh4qNSEQSpuzYtlbaESBrSRJPeO9dNAiWdYHrgwuE73/2dc+4FHKK/xzqUGI8/nps9/2bqRXxs8Kx13MnnGF2xQHT+52C6kLnEvk6fWcsvX6Dz3/rzvZ3G0YYAz5+eeGJvXOb3b8fuApBuDkev0ZVz9vjDjpGGANPJUzPZxYs2gMMVSUt96itPjHZ8dPILtUIuW1r1SBxdRwwDADQNAU0lYqm4+ashwMTrpTHOKK4P7b8BgNwaaruqejiZnFp9+b/pTQB+AMqr0c632R9xemUgdGfpfXc++ejYFwC+St3ceolUk5lEXzJsuU9m0n+KufVSsTvmCzNK4YKND59/r3lVIvmbibqQKrw7PbwwsG0FSbSJV4Y7qIteKyjqqcX8X49oI5Uq5BQZblmwJTAmbJYZd5y/NQgLQARAK4CmZ/ciI3yuhycetCUBNFXO7toVXNVkOYOVrQVdFfaBUqgyDgIoA+AA0rWNt/1C9W1UGQfAGHSFhAEodXx1Ac2GIrSAUoR0QQUQ2inAbPETDxiDaRDSHsDeHQHaTezZpQkElELgDL0xX7QewOUkRiyZzn7fmLSpDTAG7mLr9QD/ANHUpo+Ln4lLAAAAAElFTkSuQmCC";
 //utils
 var policies = [];
 var selected_policies = "";
@@ -606,6 +605,7 @@ function hideButton(ele) {
 function showButton(ele) {
     // alert("show butt")
     ele.style["backgroundRepeat"] = "no-repeat"
+    // ele.style["backgroundColor"] = "black"
     ele.style["backgroundImage"] = "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/klEQVQ4jZWRy2sTURTGvzuTTCczTWYmiU46oT5TJD4Kpl2UdmGLUStFQbsR3bgriNK/QFEQN27ciaWKCAWhqNQQrBSh4qNSEQSpuzYtlbaESBrSRJPeO9dNAiWdYHrgwuE73/2dc+4FHKK/xzqUGI8/nps9/2bqRXxs8Kx13MnnGF2xQHT+52C6kLnEvk6fWcsvX6Dz3/rzvZ3G0YYAz5+eeGJvXOb3b8fuApBuDkev0ZVz9vjDjpGGANPJUzPZxYs2gMMVSUt96itPjHZ8dPILtUIuW1r1SBxdRwwDADQNAU0lYqm4+ashwMTrpTHOKK4P7b8BgNwaaruqejiZnFp9+b/pTQB+AMqr0c632R9xemUgdGfpfXc++ejYFwC+St3ceolUk5lEXzJsuU9m0n+KufVSsTvmCzNK4YKND59/r3lVIvmbibqQKrw7PbwwsG0FSbSJV4Y7qIteKyjqqcX8X49oI5Uq5BQZblmwJTAmbJYZd5y/NQgLQARAK4CmZ/ciI3yuhycetCUBNFXO7toVXNVkOYOVrQVdFfaBUqgyDgIoA+AA0rWNt/1C9W1UGQfAGHSFhAEodXx1Ac2GIrSAUoR0QQUQ2inAbPETDxiDaRDSHsDeHQHaTezZpQkElELgDL0xX7QewOUkRiyZzn7fmLSpDTAG7mLr9QD/ANHUpo+Ln4lLAAAAAElFTkSuQmCC)"
     ele.ucButtonX = (ele.clientWidth - BUTTON_WIDTH);
     ele.style["backgroundPosition"] = ele.ucButtonX + "px 0px"
