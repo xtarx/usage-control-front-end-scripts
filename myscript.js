@@ -1,10 +1,11 @@
 var uc = {
     version: "1.0"
 }
-var pmp_server_url = "http://localhost:21010/pmp";
+var pmp_server_url = "http://localhost:21000/pmp";
 //utils
 var policies = [];
 var selected_policies = "";
+var selected_policies_array = [];
 var Utils = uc.Utils = {
     isArray: function(obj) {
         return Object.prototype.toString.call(obj) === '[object Array]';
@@ -692,23 +693,41 @@ function addRestoreTextMenuitem(menu, tidyText, field) {
 }
 
 function setFieldValue(field, value) {
-    field.setAttribute("concon", "sssc_policy_" + value + "_" + field.name);
-    field.style["border"] = "2px solid green"
+    if (value == "None") {
+        selected_policies_array[field.name] = 0;
+        // selected_policies_array.splice(field.name, 1);
+                field.style["border"] = ""
+
+    } else {
+        field.style["border"] = "4px solid blue"
+    }
     field.innerHTML = value;
     //add to array
     //first_name!&!policy1##last_name!&!policy2##age!&!policy3#
-    selected_policies += field.name + "!&!" + value + "##";
+    selected_policies_array[field.name] = value;
+    selected_policies = "";
+    for (var key in selected_policies_array) {
+        // console.log("key " + key + " has value " + selected_policies_array[key]);
+        if (selected_policies_array[key] != "None") {
+            selected_policies += key + "!&!" + selected_policies_array[key] + "##";
+        }
+    }
     var uc_hidden = document.getElementById("uc_protected_fields");
     uc_hidden.value = selected_policies
 }
 
 function addHiddenValue() {
     forms = document.getElementsByTagName('form');
+    if(!forms){
+        return false;
+    }
     var input = document.createElement("input");
     input.type = "hidden";
     input.name = "uc_protected_fields";
     input.id = "uc_protected_fields";
-    forms[0].appendChild(input)
+    for (i = 0; i < forms.length; i++) {
+        forms[i].appendChild(input)
+    }
 }
 
 function getPolicies() {
@@ -717,7 +736,11 @@ function getPolicies() {
     var client = new TAny2PmpClient(protocol);
     var msg = JSON.stringify(client.listPoliciesPmp());
     msg = JSON.parse(msg);
+    policies.push({
+        name: "None"
+    });
     msg.forEach(function(element) {
+        // console.log(element);
         policies.push(element);
     });
 }
